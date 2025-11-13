@@ -9,5 +9,6 @@ package controlmaritimo;
  * @author DELL
  */
 public class Zonas {
+    System.out.println("Hola prueba");
     
 }
