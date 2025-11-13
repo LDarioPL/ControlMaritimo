@@ -10,4 +10,5 @@ package controlmaritimo;
  */
 public class Barcos {
     System.out.print("Hello poopoo");
+    // why tf is this giving me an error
 }
