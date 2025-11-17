@@ -30,22 +30,39 @@ public class ZonaPesca {
         this.trabajosPesca = new ArrayList<>();
     }
     
-    public String getClaveGeolocalizacion() { return claveGeolocalizacion; }
+    public String getClaveGeolocalizacion() { 
+        return claveGeolocalizacion; 
+    }
     public void setClaveGeolocalizacion(String claveGeolocalizacion) { 
         this.claveGeolocalizacion = claveGeolocalizacion; 
     }
     
-    public double getLatitud() { return latitud; }
-    public void setLatitud(double latitud) { this.latitud = latitud; }
+    public double getLatitud() { 
+        return latitud; 
+    }
+    public void setLatitud(double latitud) { 
+        this.latitud = latitud; 
+    }
     
-    public double getLongitud() { return longitud; }
-    public void setLongitud(double longitud) { this.longitud = longitud; }
+    public double getLongitud() { 
+        return longitud; 
+    }
+    public void setLongitud(double longitud) { 
+        this.longitud = longitud; 
+    }
     
-    public double getRadioKm() { return radioKm; }
-    public void setRadioKm(double radioKm) { this.radioKm = radioKm; }
+    public double getRadioKm() { 
+        return radioKm; 
+    }
+    public void setRadioKm(double radioKm) { 
+        this.radioKm = radioKm; 
+    }
     
-    public List<String> getEspeciesPeces() { return new ArrayList<>(especiesPeces); }
+    public List<String> getEspeciesPeces() { 
+        return new ArrayList<>(especiesPeces); 
+    }
     public void setEspeciesPeces(List<String> especiesPeces) { 
+        
         this.especiesPeces = new ArrayList<>(especiesPeces); 
     }
     
