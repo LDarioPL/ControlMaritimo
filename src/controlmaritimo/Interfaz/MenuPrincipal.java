@@ -9,5 +9,5 @@ package controlmaritimo.Interfaz;
  * @author DELL
  */
 public class MenuPrincipal {
-    //bread
+    //AQUI FALTA, Y AGREGAR toString() en las clases de los modelos
 }
