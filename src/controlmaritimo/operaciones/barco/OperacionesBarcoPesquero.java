@@ -2,12 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package controlmaritimo.Interfaz;
+package controlmaritimo.operaciones.barco;
 
 /**
  *
- * @author DELL
+ * @author yazid
  */
-public class MenuPrincipal {
-    //AQUI FALTA, Y AGREGAR toString() en las clases de los modelos
+public class OperacionesBarcoPesquero {
+    
 }

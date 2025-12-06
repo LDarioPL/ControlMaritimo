@@ -4,6 +4,7 @@
  */
 package controlmaritimo.Servicios;
 
+import controlmaritimo.abstracciones.Barco;
 import controlmaritimo.Modelos.*;
 import controlmaritimo.Repositorio.*;
 import java.time.LocalDate;

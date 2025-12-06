@@ -4,7 +4,7 @@
  */
 package controlmaritimo.Repositorio;
 
-import controlmaritimo.Modelos.Barco;
+import controlmaritimo.abstracciones.Barco;
 import controlmaritimo.Utilidades.AlmacenamientoArchivoTXT;
 import java.util.List;
 import java.util.stream.Collectors;

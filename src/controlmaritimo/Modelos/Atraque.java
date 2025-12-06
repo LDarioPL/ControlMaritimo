@@ -9,6 +9,7 @@ package controlmaritimo.Modelos;
  * @author DELL
  */
 
+import controlmaritimo.abstracciones.Barco;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

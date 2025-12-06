@@ -9,6 +9,7 @@ package controlmaritimo.Modelos;
  * @author DELL
  */
 
+import controlmaritimo.abstracciones.Barco;
 import java.time.LocalDate;
 
 public class BarcoPassengers extends Barco {

@@ -9,6 +9,7 @@ package controlmaritimo.Modelos;
  * @author DELL
  */
 
+import controlmaritimo.abstracciones.Barco;
 import java.time.LocalDateTime;
 
 public class Transaccion {
