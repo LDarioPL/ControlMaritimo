@@ -10,6 +10,9 @@ package controlmaritimo.Modelos;
  */
 
 import controlmaritimo.abstracciones.Barco;
+import controlmaritimo.barcos.BarcoCarga;
+import controlmaritimo.barcos.BarcoPasajeros;
+import controlmaritimo.barcos.BarcoPesca;
 import java.time.LocalDateTime;
 
 public class Transaccion {
@@ -42,7 +45,7 @@ public class Transaccion {
     
     private String obtenerUnidad() {
         Barco barco = atraque.getBarco();
-        if (barco instanceof BarcoPassengers) {
+        if (barco instanceof BarcoPasajeros) {
             return "pasajeros";
         } else if (barco instanceof BarcoPesca) {
             return "toneladas";
