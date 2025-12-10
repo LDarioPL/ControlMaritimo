@@ -10,11 +10,17 @@ import controlmaritimo.abstracciones.interfaces.IOperacionesDocumentos;
 import controlmaritimo.abstracciones.interfaces.IOperacionesZonaPesca;
 import controlmaritimo.abstracciones.interfaces.IOrquestadorMenus;
 import controlmaritimo.modelos.documentos.ConocimientoEmbarque;
+import controlmaritimo.modelos.documentos.DocumentoAtraque;
+import controlmaritimo.modelos.documentos.TransaccionMercantil;
+import controlmaritimo.modelos.lugares.Puerto;
 import controlmaritimo.modelos.lugares.ZonaPesca;
 import controlmaritimo.operaciones.barcos.OperacionesBarcoCarga;
 import controlmaritimo.operaciones.barcos.OperacionesBarcoPasajeros;
 import controlmaritimo.operaciones.barcos.OperacionesBarcoPesquero;
 import controlmaritimo.operaciones.documentos.OperacionesConocimientoEmbarque;
+import controlmaritimo.operaciones.documentos.OperacionesDocumentoAtraque;
+import controlmaritimo.operaciones.documentos.OperacionesTransaccionMercantil;
+import controlmaritimo.operaciones.lugares.OperacionesPuerto;
 import controlmaritimo.operaciones.lugares.OperacionesZonaPesca;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,9 +33,9 @@ import java.util.Scanner;
  * metodos necesarios para hacer funcionar el programa, esta clase contiene el
  * menu principal de ejecución.
  *
- * @version 2.0, 06/12/2025
+ * @version 3.0, 09/12/2025
  * @author yazid
- * @author
+ * @author emilio
  * @author
  * @author
  *
@@ -38,6 +44,9 @@ public class Orquestador {
     
     private List<Barco> barcos;
     private List<ZonaPesca> zonasPesca;
+    private List<Puerto> puertos;
+    private List<DocumentoAtraque> documentosAtraque;
+    private List<TransaccionMercantil> transaccionesMercantiles;
     private List<ConocimientoEmbarque> conocimientosEmbarque;
     private Scanner leer;
     private SimpleDateFormat sdf;
@@ -45,6 +54,9 @@ public class Orquestador {
     public Orquestador() {
         barcos = new ArrayList<>();
         zonasPesca = new ArrayList<>();
+        puertos = new ArrayList<>();
+        documentosAtraque = new ArrayList<>();
+        transaccionesMercantiles = new ArrayList<>();
         conocimientosEmbarque = new ArrayList<>();
         leer = new Scanner(System.in);
         sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -58,6 +70,8 @@ public class Orquestador {
 
         IOrquestadorMenus menu = new OrquestadorMenus();
         IOperacionesZonaPesca operacionesZonaPesca = new OperacionesZonaPesca(this.zonasPesca);
+        OperacionesPuerto operacionesPuerto = new OperacionesPuerto(this.puertos);
+
 
         do {
             menu.mostrarMenuPrincipal();
@@ -165,16 +179,16 @@ public class Orquestador {
 
                         switch (opcionOperaciones) {
                             case 1 -> {
-                                System.out.println("En desarrollo...");
+                                operacionesPuerto.registrarPuerto();
                             }
                             case 2 -> {
-                                System.out.println("En desarrollo...");
+                                operacionesPuerto.editarDatosPuerto();
                             }
                             case 3 -> {
-                                System.out.println("En desarrollo...");
+                                operacionesPuerto.eliminarPuerto();
                             }
                             case 4 -> {
-                                System.out.println("En desarrollo...");
+                                operacionesPuerto.consultarDatosPuerto();
                             }
                             case 5 -> {
                                 System.out.println("Regresando...");
@@ -202,11 +216,11 @@ public class Orquestador {
                                 banderaTipoDocumento = false;
                             }
                             case 2 -> {
-                                System.out.println("En desarrollo... documento no disponible.");
+                                operaciones = new OperacionesDocumentoAtraque(this.documentosAtraque, this.barcos, this.puertos);
                                 banderaTipoDocumento = false;
                             }
                             case 3 -> {
-                                System.out.println("En desarrollo... documento no disponible.");
+                                operaciones = new OperacionesTransaccionMercantil(this.transaccionesMercantiles, this.documentosAtraque);
                                 banderaTipoDocumento = false;
                             }
                             default -> {
