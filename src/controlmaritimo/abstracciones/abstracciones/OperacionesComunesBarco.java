@@ -9,33 +9,33 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Esta clase contiene las operaciones comunes para todos los tipos de barco
- * existentes, incluye operaciones de registro, actualización, eliminación y
- * consulta, esta clase abstracta sirve de base para las operaciones de cada
- * tipo de barco.
+ * Esta clase contiene todas las operaciones comunes para todos los tipos de
+ * barcos existentes, incluye operaciones de registro, actualización,
+ * eliminación y consulta de datos, esta clase abstracta sirve como base para
+ * las operaciones que debe realizar de cada tipo de barco.
  *
  * @version 1.1 06/12/2025
  *
- * @author yazid
- * @author 
- * @author 
- * @author 
+ * @author Nicolás Yazid Cruz Hernández
+ * @author Emilio Álvarez Villalobos
+ * @author Luis Darío Padilla López
+ * @author Isaac Adriano Vázquez Torres
  */
 public abstract class OperacionesComunesBarco implements IOperacionesBarco {
-    
-    // Atributos protegidos para que las hijas (Pasajeros, Carga, Pesca) los usen
+
+    // Atributos que usaran las clases que hereden (tipos de barco)
     protected List<Barco> listaBarcos;
     protected Scanner leer;
 
+    // Método constructor sobrecargado
     public OperacionesComunesBarco(List<Barco> listaBarcos) {
         this.listaBarcos = listaBarcos;
         this.leer = new Scanner(System.in);
     }
 
-    // =========================================================
-    // IMPLEMENTACIÓN DE MÉTODOS COMUNES (Consultar y Eliminar)
-    // =========================================================
-
+    /**
+     * Método común para consultar los datos de cualquier tipo de barco.
+     */
     @Override
     public void consultarDatosBarco() {
         System.out.println("\n--- CONSULTA DE BARCOS ---");
@@ -54,19 +54,25 @@ public abstract class OperacionesComunesBarco implements IOperacionesBarco {
             int opcion = Integer.parseInt(leer.nextLine());
 
             switch (opcion) {
-                case 1 -> listarTodos();
-                case 2 -> buscarYMostrarPorMatricula();
-                default -> System.out.println("Opción no válida.");
+                case 1 ->
+                    listarTodos();
+                case 2 ->
+                    buscarYMostrarPorMatricula();
+                default ->
+                    System.out.println("Opción no válida.");
             }
         } catch (NumberFormatException e) {
             System.out.println("Por favor ingresa un número válido.");
         }
     }
 
+    /**
+     * Método común para eliminar cualquier tipo de barco.
+     */
     @Override
     public void eliminarBarco() {
         System.out.println("\n--- ELIMINAR BARCO ---");
-        
+
         if (listaBarcos.isEmpty()) {
             System.out.println("No hay barcos para eliminar.");
             return;
@@ -74,21 +80,20 @@ public abstract class OperacionesComunesBarco implements IOperacionesBarco {
 
         System.out.print("Ingresa la matrícula del barco a eliminar: ");
         String matricula = leer.nextLine();
-        
+
         // Usamos una variable auxiliar para saber si lo borramos
         boolean eliminado = false;
 
-        // Recorremos la lista al revés o usamos removeIf, 
-        // pero para hacerlo clásico y claro usamos un ciclo simple:
+        // Recorremos la lista al reves
         for (int i = 0; i < listaBarcos.size(); i++) {
             Barco b = listaBarcos.get(i);
-            
-            // Verificamos matrícula y que sea del tipo correcto
-            if (b.getMatricula().equalsIgnoreCase(matricula) && esTipoValido(b)) {
+
+            // Verificamos la matricula y que sea del tipo correcto
+            if ((b.getMatricula().equalsIgnoreCase(matricula)) && (esTipoValido(b))) {
                 listaBarcos.remove(i);
-                System.out.println("¡El barco con matrícula " + matricula + " ha sido eliminado exitosamente!");
+                System.out.println("> El barco con matrícula " + matricula + " ha sido eliminado exitosamente.");
                 eliminado = true;
-                break; // Rompemos el ciclo porque ya lo borramos
+                break; // Se rompe el ciclo porque el barco ya ha sido borrado
             }
         }
 
@@ -97,10 +102,9 @@ public abstract class OperacionesComunesBarco implements IOperacionesBarco {
         }
     }
 
-    // =========================================================
-    // MÉTODOS AUXILIARES (Privados/Protegidos)
-    // =========================================================
-
+    /**
+     * Método auxiliar para listar todos los barcos.
+     */
     private void listarTodos() {
         System.out.println("\n--- LISTADO GENERAL ---");
         boolean hayBarcosDelTipo = false;
@@ -114,7 +118,7 @@ public abstract class OperacionesComunesBarco implements IOperacionesBarco {
                 hayBarcosDelTipo = true;
             }
         }
-        
+
         if (!hayBarcosDelTipo) {
             System.out.println("No hay barcos de este tipo registrados aún.");
         } else {
@@ -122,6 +126,9 @@ public abstract class OperacionesComunesBarco implements IOperacionesBarco {
         }
     }
 
+    /**
+     * Método auxiliar para buscar y mostrar un barco según una matricula.
+     */
     private void buscarYMostrarPorMatricula() {
         System.out.print("Ingresa la matrícula a buscar: ");
         String matriculaBusqueda = leer.nextLine();
@@ -142,7 +149,14 @@ public abstract class OperacionesComunesBarco implements IOperacionesBarco {
             System.out.println("No se encontró ningún barco con la matrícula: " + matriculaBusqueda);
         }
     }
-    
+
+    /**
+     * Método que sirve para buscar un barco según una matricula, pero no
+     * muestra la información.
+     *
+     * @param matricula
+     * @return null si no se encontro el barco
+     */
     protected Barco buscarBarcoPorMatricula(String matricula) {
         for (Barco b : listaBarcos) {
             if (b.getMatricula().equalsIgnoreCase(matricula)) {
@@ -152,19 +166,27 @@ public abstract class OperacionesComunesBarco implements IOperacionesBarco {
         return null;
     }
 
-    // =========================================================
-    // DEFINICIÓN DE MÉTODOS ABSTRACTOS (Responsabilidad de los hijos)
-    // =========================================================
-
-    // Estos métodos NO se implementan aquí. 
-    // Al declararlos abstractos, OBLIGAS a las clases hijas a tenerlos.
+    /**
+     * Método abstracto para registrar un barco, su implementación dependerá de
+     * la clase que herede de esta.
+     */
     @Override
     public abstract void registrarBarco();
 
+    /**
+     * Método abstracto para editar los datos un barco, su implementación
+     * dependerá de la clase que herede de esta.
+     */
     @Override
     public abstract void editarDatosBarco();
     
-    // ESTE ES NUEVO: Sirve para que 'listarTodos' sepa qué imprimir sin usar instanceof hardcodeado
+    /**
+     * Sirve para que el método listarTodos() conozca qué debe imprimir sin
+     * utilizar instanceof
+     * 
+     * @param b
+     * @return 
+     */
     protected abstract boolean esTipoValido(Barco b);
-    
+
 }

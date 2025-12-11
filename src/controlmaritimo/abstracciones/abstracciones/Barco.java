@@ -11,12 +11,18 @@ import java.util.List;
 
 /**
  *
- * Clase base abstracta para todos los tipos de barcos.
- * 
- * @author yazid
+ * Clase abstracta que contiene todos los atributos comunes de un barco,
+ * contiene un constructor sobrecargado y todos los metodos getters y setters.
+ *
+ * @version 4.0 08/02/2025
+ *
+ * @author Nicolás Yazid Cruz Hernández
+ * @author Emilio Álvarez Villalobos
+ * @author Luis Darío Padilla López
+ * @author Isaac Adriano Vázquez Torres
  */
 public abstract class Barco {
-    
+
     protected String matricula;
     protected String bandera;
     protected String nombre;
@@ -34,7 +40,8 @@ public abstract class Barco {
         this.fechaBotadura = fechaBotadura;
         this.atraques = new ArrayList<>();
     }
-
+    
+    // Métodos getters y setters
     public String getMatricula() {
         return matricula;
     }
@@ -78,7 +85,12 @@ public abstract class Barco {
     public List<DocumentoAtraque> getAtraques() {
         return atraques;
     }
-
+    
+    /**
+     * Método que muestra la información de un barco (todos sus atributos).
+     * 
+     * @return String que contiene la información de un barco.
+     */
     public String obtenerInformacionBarco() {
         return String.format("""
                              Matrícula: %s
@@ -92,7 +104,13 @@ public abstract class Barco {
                 fechaBotadura, atraques.size(), getTipoBarco()
         );
     }
-
-    public abstract String getTipoBarco();
     
+    /**
+     * Método abstracto para obtener el tipo de barco según la clase que herede
+     * de esta.
+     * 
+     * @return String que índica el tipo de barco.
+     */
+    public abstract String getTipoBarco();
+
 }
