@@ -8,7 +8,7 @@ package controlmaritimo.abstracciones.interfaces;
  * Esta interfaz contiene todas las operaciones basicas para cualquier tipo de
  * barco: registro, eliminación, edición y consulta de datos.
  * 
- * @version 1.2 06/12/2025
+ * @version 1.3 06/12/2025
  * 
  * @author Nicolás Yazid Cruz Hernández
  * @author Emilio Álvarez Villalobos

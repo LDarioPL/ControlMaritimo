@@ -7,11 +7,23 @@ package controlmaritimo.logica;
 import controlmaritimo.abstracciones.interfaces.IOrquestadorMenus;
 
 /**
+ * Esta clase implementa la interfaz IOrquestadorMenus, se encarga de
+ * implementar todos los metodos que seran usados por el orquestador para
+ * mostrar al usuario las opciones disponibles para cada modulo de la
+ * aplicación.
  *
- * @author yazid
+ * @version 1.5 08/12/2025
+ *
+ * @author Nicolás Yazid Cruz Hernández
+ * @author Emilio Álvarez Villalobos
+ * @author Isaac Ádriano Vazquez Torres
+ * @author Luis Darío Padilla Lopez
  */
 public class OrquestadorMenus implements IOrquestadorMenus {
 
+    /**
+     * Muestra el menú principal de la aplicación.
+     */
     @Override
     public void mostrarMenuPrincipal() {
         System.out.println("Administración general");
@@ -25,6 +37,9 @@ public class OrquestadorMenus implements IOrquestadorMenus {
         System.out.print("> Ingresa una opción: ");
     }
 
+    /**
+     * Muestra el menú de los tipos de barco disponibles.
+     */
     @Override
     public void mostrarMenuTipoBarco() {
         System.out.println("Elige un tipo de barco:");
@@ -36,6 +51,9 @@ public class OrquestadorMenus implements IOrquestadorMenus {
         System.out.print("> ");
     }
 
+    /**
+     * Muestra el menú de las operaciones que se pueden realizar para un barco.
+     */
     @Override
     public void mostrarMenuOperacionesBarco() {
         System.out.println("Opciones de administración para los barcos");
@@ -49,6 +67,9 @@ public class OrquestadorMenus implements IOrquestadorMenus {
         System.out.print("> Ingresa una opción: ");
     }
 
+    /**
+     * Muestra el menú de opeaciones de una zona de pesca.
+     */
     @Override
     public void mostrarMenuZonaPesca() {
         System.out.println("Opciones de administración para las zonas de pesca");
@@ -62,6 +83,9 @@ public class OrquestadorMenus implements IOrquestadorMenus {
         System.out.print("> Ingresa una opción: ");
     }
 
+    /**
+     * Muestra el menú de las operaciones de un puerto.
+     */
     @Override
     public void mostrarMenuPuerto() {
         System.out.println("Opciones de administración para las zonas portuarias");
@@ -75,6 +99,9 @@ public class OrquestadorMenus implements IOrquestadorMenus {
         System.out.print("> Ingresa una opción: ");
     }
 
+    /**
+     * Muestra el menú de los documentos disponibles.
+     */
     @Override
     public void mostrarMenuDocumentos() {
         System.out.println("Documentos de Control Maritimo");
@@ -86,6 +113,9 @@ public class OrquestadorMenus implements IOrquestadorMenus {
         System.out.println("> Ingresa una opción: ");
     }
 
+    /**
+     * Muestra el menú de las operaciones disponibles a realizar a un documento.
+     */
     @Override
     public void mostrarMenuOperacionesDocumentos() {
         System.out.println("Operaciones de documentación");
@@ -99,6 +129,10 @@ public class OrquestadorMenus implements IOrquestadorMenus {
         System.out.println("> Ingresa una opción: ");
     }
 
+    /**
+     * Muestra el menú de las posibles transacciones que podrían implementarse a
+     * futuro.
+     */
     @Override
     public void mostrarMenuTransaccion() {
         System.out.println("Administración...");

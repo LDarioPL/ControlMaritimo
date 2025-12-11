@@ -28,20 +28,24 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * 
+ *
  * Clase que orquesta a todas las clases, se encarga de llamar a todos los
  * metodos necesarios para hacer funcionar el programa, esta clase contiene el
  * menu principal de ejecución.
  *
- * @version 3.0, 09/12/2025
- * @author yazid
- * @author emilio
- * @author
- * @author
  *
+ * @version 2.7 10/12/2025
+ *
+ * @author Nicolás Yazid Cruz Hernández
+ * @author Emilio Álvarez Villalobos
+ * @author Isaac Ádriano Vazquez Torres
+ * @author Luis Darío Padilla Lopez
  */
 public class Orquestador {
-    
+
+    /**
+     * Listas de objetos que utilizaremos.
+     */
     private List<Barco> barcos;
     private List<ZonaPesca> zonasPesca;
     private List<Puerto> puertos;
@@ -51,6 +55,10 @@ public class Orquestador {
     private Scanner leer;
     private SimpleDateFormat sdf;
 
+    /**
+     * Inicializaremos en el constructor todos los elementos de las demás clases
+     * que necesitaremos.
+     */
     public Orquestador() {
         barcos = new ArrayList<>();
         zonasPesca = new ArrayList<>();
@@ -62,17 +70,31 @@ public class Orquestador {
         sdf = new SimpleDateFormat("dd/MM/yyyy");
     }
 
+    /**
+     * Único método de esta clase, se encarga de hacer funcionar el código
+     * mediante la utilización de interfaces para acceder a las clases de
+     * operaciones de cada clase perteneciente al paquete de modelo y de este
+     * modo hacer funcionar el código. Esta clase se encarga de la lógica del
+     * programa mediante la creación de un menu que orquesta todas las llamadas
+     * a otras clases.
+     */
     public void ejecutar() {
         int opcionGeneral;
         int opcionOperaciones;
         int opcionTipoBarco;
         int opcionTipoDocumento;
 
+        /**
+         * Interfaces y clase abstracta que utilizaremos para hacer funcionar
+         * las operaciones de cada modulo.
+         */
         IOrquestadorMenus menu = new OrquestadorMenus();
         IOperacionesZonaPesca operacionesZonaPesca = new OperacionesZonaPesca(this.zonasPesca);
         OperacionesPuerto operacionesPuerto = new OperacionesPuerto(this.puertos);
 
-
+        /**
+         * Ciclo principal que hace sirve al menu principal de la aplicación.
+         */
         do {
             menu.mostrarMenuPrincipal();
             opcionGeneral = leer.nextInt();
@@ -230,7 +252,13 @@ public class Orquestador {
 
                     } while (banderaTipoDocumento == true);
                     
-                    if (operaciones != null) { //Talón de Aquiles
+                    /**
+                     * En un caso hipotetico, si uno de los casos del switch de
+                     * arriba no crease un objeto entonces la interfaz quedaria
+                     * con el valor de null y por lo tanto no se ejecutaria
+                     * ninguna de las siguientes instrucciones.
+                     */
+                    if (operaciones != null) {
                         do {
                             menu.mostrarMenuOperacionesDocumentos();
                             opcionOperaciones = leer.nextInt();
@@ -268,5 +296,5 @@ public class Orquestador {
             }
         } while (opcionGeneral != 5);
     }
-    
+
 }

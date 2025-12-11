@@ -9,30 +9,40 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 /**
- * Esta clase se encarga de contener
- * el método que sirve para validar
- * que cualquier fecha ingresada
- * este en el formato correcot (dd/MM/yyyy).
- * 
+ * Esta clase se encarga de contener el método que sirve para validar que
+ * cualquier fecha ingresada este en el formato correcto (dd/MM/yyyy).
+ *
  * @version 1.0 06/12/2025
  *
- * @author yazid
+ * @author Nicolás Yazid Cruz Hernández
+ * @author Emilio Álvarez Villalobos
+ * @author Isaac Ádriano Vazquez Torres
+ * @author Luis Darío Padilla Lopez
  */
 public class ValidarFecha {
-    
+
+    /**
+     * Método que valida que cualquier fecha ingresada cumpla con el formato
+     * correcto (dd/MM/yyy)
+     *
+     * @param fechaString
+     * @return fecha
+     */
     public static LocalDate validarFecha(String fechaString) {
+
         // Definición del formato
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        
+
         try {
             if (fechaString != null && !fechaString.isBlank()) {
+
                 // Parseamos directamente a LocalDate
                 return LocalDate.parse(fechaString, formato);
             }
         } catch (DateTimeParseException e) {
             System.out.println("Formato de fecha inválido. Usa dd/MM/yyyy");
         }
-        return null; // Retorna null si falla
+        return null;    // Retorna null si falla
     }
-    
+
 }

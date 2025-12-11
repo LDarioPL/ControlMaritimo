@@ -10,7 +10,7 @@ package controlmaritimo.abstracciones.interfaces;
  * Conocimiento de Embarque, Documento de atraque, Documento de una Transacción
  * Mercantil, etc.
  *
- * @version 1.0 08/12/2025
+ * @version 1.2 08/12/2025
  *
  * @author Nicolás Yazid Cruz Hernández
  * @author Emilio Álvarez Villalobos

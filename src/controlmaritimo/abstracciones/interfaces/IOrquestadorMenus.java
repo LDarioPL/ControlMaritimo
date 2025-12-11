@@ -10,7 +10,7 @@ package controlmaritimo.abstracciones.interfaces;
  * Orquestador para poder mostrar al usuario las opciones disponibles de la
  * aplicación.
  *
- * @version 2.0 08/12/2025
+ * @version 1.5 08/12/2025
  *
  * @author Nicolás Yazid Cruz Hernández
  * @author Emilio Álvarez Villalobos

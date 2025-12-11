@@ -8,19 +8,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Esta clase declara todos los atributos propios de una zona de pesca,
+ * incluyendo datos como la clave de geolocalización, latitud, longitud, el
+ * radio en kilometros así como una lista de especies que habitan en la zona.
  *
- * @author yazid
+ * @version 1.3 08/12/2025
+ *
+ * @author Nicolás Yazid Cruz Hernández
+ * @author Emilio Álvarez Villalobos
+ * @author Isaac Ádriano Vazquez Torres
+ * @author Luis Darío Padilla Lopez
  */
 public class ZonaPesca {
-    
+
+    // Atributos propios de la zona de pesca
     private String claveGeolocalizacion;
     private Double latitud;
     private Double longitud;
     private Double radioKm;
     private List<String> especiesPez;
 
+    // Método constructor sobrecargado
     public ZonaPesca(String claveGeolocalizacion, double latitud, double longitud,
-                     double radioKm, List<String> especiesPez) {
+            double radioKm, List<String> especiesPez) {
 
         this.claveGeolocalizacion = claveGeolocalizacion;
         this.latitud = latitud;
@@ -29,6 +39,7 @@ public class ZonaPesca {
         this.especiesPez = new ArrayList<>(especiesPez);
     }
 
+    // Metodos getters y setters
     public String getClaveGeolocalizacion() {
         return claveGeolocalizacion;
     }
@@ -69,6 +80,11 @@ public class ZonaPesca {
         this.especiesPez = new ArrayList<>(especiesPez);
     }
 
+    /**
+     * Método que retorna un mensaje con la información de la zona de pesca.
+     *
+     * @return String con la información de la zona de pesca
+     */
     public String obtenerInfo() {
         String especies = String.join(", ", especiesPez);
         return String.format("""
@@ -80,5 +96,5 @@ public class ZonaPesca {
                 especies
         );
     }
-    
+
 }

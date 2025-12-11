@@ -10,7 +10,7 @@ package controlmaritimo.abstracciones.interfaces;
  * descarga de algo perteneciente a una transacción mercantil, ejemplo:
  * cargar/descargar contenedores de un barco de carga.
  *
- * @version 1.1 06/12/2025
+ * @version 1.2 06/12/2025
  *
  * @author Nicolás Yazid Cruz Hernández
  * @author Emilio Álvarez Villalobos

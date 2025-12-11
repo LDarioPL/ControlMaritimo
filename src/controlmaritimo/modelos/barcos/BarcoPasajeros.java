@@ -8,16 +8,25 @@ import controlmaritimo.abstracciones.abstracciones.Barco;
 import java.time.LocalDate;
 
 /**
+ * Esta clase hereda de la clase Barco y declara los atributos únicos y
+ * pertenecientes a un barco de pasajeros.
  *
- * @author yazid
+ * @version 1.8 08/12/2025
+ *
+ * @author Nicolás Yazid Cruz Hernández
+ * @author Emilio Álvarez Villalobos
+ * @author Isaac Ádriano Vazquez Torres
+ * @author Luis Darío Padilla Lopez
  */
 public class BarcoPasajeros extends Barco {
 
+    // Atriburos propios de un barco de pasajeros
     private int limitePasajeros;
     private int cantidadPasajeros;
     private int numeroPisos;
     private String tipoViaje;
 
+    //Constructro sobrecargado
     public BarcoPasajeros(String matricula, String bandera, String nombre,
             double pesoToneladas, LocalDate fechaBotadura,
             int limitePasajeros, int cantidadPasajeros,
@@ -30,6 +39,7 @@ public class BarcoPasajeros extends Barco {
         this.tipoViaje = tipoViaje;
     }
 
+    // Metodos getters y setters
     public int getLimitePasajeros() {
         return limitePasajeros;
     }
@@ -62,11 +72,22 @@ public class BarcoPasajeros extends Barco {
         this.tipoViaje = tipoViaje;
     }
 
+    /**
+     * Método que retorna el tipo de barco.
+     *
+     * @return String refiriendose al tipo de barco.
+     */
     @Override
     public String getTipoBarco() {
         return "Barco de pasajeros";
     }
 
+    /**
+     * Método que retorna la información (atributos) propia de un barco de
+     * pasajeros.
+     *
+     * @return String que contiene la información de este tipo de barco.
+     */
     @Override
     public String obtenerInformacionBarco() {
         return super.obtenerInformacionBarco() + String.format(

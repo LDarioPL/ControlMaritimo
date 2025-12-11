@@ -11,27 +11,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Esta clase hereda de la clase Barco y declara los atributos únicos y
+ * pertenecientes a un barco pesquero.
  *
- * @author yazid
+ * @version 1.5 08/12/2025
+ *
+ * @author Nicolás Yazid Cruz Hernández
+ * @author Emilio Álvarez Villalobos
+ * @author Isaac Ádriano Vazquez Torres
+ * @author Luis Darío Padilla Lopez
  */
 public class BarcoPesquero extends Barco {
-    
+
+    // Atriburos propios de un barco pesquero
     private double limiteToneladas;
     private double numToneladas;
     private List<String> tiposPescado;
     private List<ConocimientoEmbarque> trabajosPesca;
-    
+
+    // Constructor sobrecargado
     public BarcoPesquero(String matricula, String bandera, String nombre,
             double pesoToneladas, LocalDate fechaBotadura, double limiteToneladas,
             double numToneladas, List<String> tiposPescado) {
 
         super(matricula, bandera, nombre, pesoToneladas, fechaBotadura);
         this.limiteToneladas = limiteToneladas;
-        this.numToneladas = numToneladas;        
+        this.numToneladas = numToneladas;
         this.tiposPescado = new ArrayList<>(tiposPescado);
         this.trabajosPesca = new ArrayList<>();
     }
 
+    //Metodos getters y setters
     public double getLimiteToneladas() {
         return limiteToneladas;
     }
@@ -72,11 +82,22 @@ public class BarcoPesquero extends Barco {
         return new ArrayList<>(trabajosPesca);
     }
 
+    /**
+     * Método que retorna el tipo de barco.
+     *
+     * @return String refiriendose al tipo de barco.
+     */
     @Override
     public String getTipoBarco() {
         return "Barco de pesca";
     }
 
+    /**
+     * Método que retorna la información (atributos) propia de un barco
+     * pesquero.
+     *
+     * @return String que contiene la información de este tipo de barco.
+     */
     @Override
     public String obtenerInformacionBarco() {
         String tipos = String.join(", ", tiposPescado);
@@ -85,5 +106,5 @@ public class BarcoPesquero extends Barco {
                 tipos, limiteToneladas, numToneladas, trabajosPesca.size()
         );
     }
-    
+
 }
