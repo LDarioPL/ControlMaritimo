@@ -11,11 +11,18 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
+ * Clase que implementa la interfaz IOperacionesZonaPesca para sobreescribir los
+ * metodos de registro, edición, consulta y eliminación de una zona de pesca.
  *
- * @author yazid
+ * @version 1.4 09/12/2025
+ *
+ * @author Emilio Álvarez Villalobos
+ * @author Nicolás Yazid Cruz Hernández
+ * @author Luis Darío Padilla Lopez
+ * @author Isaac Ádriano Vazquez Torres
  */
 public class OperacionesZonaPesca implements IOperacionesZonaPesca {
-    
+
     private List<ZonaPesca> listaZonas;
     private Scanner leer;
 
@@ -24,6 +31,9 @@ public class OperacionesZonaPesca implements IOperacionesZonaPesca {
         this.leer = new Scanner(System.in);
     }
 
+    /**
+     * Sobreescritura del método registrarZonaPesca para adaptarlo a esta clase.
+     */
     @Override
     public void registrarZonaPesca() {
         System.out.println("\n--- REGISTRO DE ZONA DE PESCA ---");
@@ -76,6 +86,9 @@ public class OperacionesZonaPesca implements IOperacionesZonaPesca {
         System.out.println("Zona de pesca registrada exitosamente.");
     }
 
+    /**
+     * Sobreescritura del método eliminarZonaPesca para adaptarlo a esta clase.
+     */
     @Override
     public void eliminarZonaPesca() {
         System.out.println("\n--- ELIMINAR ZONA DE PESCA ---");
@@ -92,6 +105,10 @@ public class OperacionesZonaPesca implements IOperacionesZonaPesca {
         }
     }
 
+    /**
+     * Sobreescritura del método editarDatosZonaPesca para adaptarlo a esta
+     * clase.
+     */
     @Override
     public void editarDatosZonaPesca() {
         System.out.println("\n--- EDITAR ZONA DE PESCA ---");
@@ -146,6 +163,10 @@ public class OperacionesZonaPesca implements IOperacionesZonaPesca {
         }
     }
 
+    /**
+     * Sobreescritura del método consultarDatosZonaPesca para adaptarlo a esta
+     * clase.
+     */
     @Override
     public void consultarDatosZonaPesca() {
         System.out.println("\n--- CONSULTA DE ZONAS DE PESCA ---");
@@ -192,6 +213,13 @@ public class OperacionesZonaPesca implements IOperacionesZonaPesca {
         return null;
     }
 
+    /**
+     * Método que sirve para gestionar las especies de pez de la zona de pesca,
+     * contiene funcionalidades de registro y eliminación de los peces, así como
+     * vaciar la lista completa.
+     * 
+     * @param zona
+     */
     private void gestionarEspecies(ZonaPesca zona) {
         List<String> especies = zona.getEspeciesPeces(); // Obtenemos copia
 
@@ -231,5 +259,5 @@ public class OperacionesZonaPesca implements IOperacionesZonaPesca {
             System.out.println("Error de entrada.");
         }
     }
-    
+
 }

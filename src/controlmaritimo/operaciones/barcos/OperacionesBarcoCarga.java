@@ -12,15 +12,26 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
+ * Clase que hereda de la clase OperacionesComunesBarco, se encarga implementar
+ * los metodos de registro y edición de datos de un barco de carga.
  *
- * @author yazid
+ * @version 1.8 08/12/2025
+ *
+ * @author Nicolás Yazid Cruz Hernández
+ * @author Emilio Álvarez Villalobos
+ * @author Isaac Ádriano Vazquez Torres
+ * @author Luis Darío Padilla Lopez
  */
 public class OperacionesBarcoCarga extends OperacionesComunesBarco {
 
     public OperacionesBarcoCarga(List<Barco> listaBarcos) {
-        super(listaBarcos); // Pasamos la lista al padre
+        super(listaBarcos);        // Pasamos la lista al padre
     }
 
+    /**
+     * Sobreescritura del metodo registrarBarco() para adaptarlo a un barco de
+     * carga.
+     */
     @Override
     public void registrarBarco() {
 
@@ -35,7 +46,7 @@ public class OperacionesBarcoCarga extends OperacionesComunesBarco {
                 System.out.println("La matrícula no puede estar vacía.");
             } else if (buscarBarcoPorMatricula(matricula) != null) {
                 System.out.println("Error: Ya existe un barco con esa matrícula. Intenta con otra.");
-                matricula = ""; // Forzamos a repetir el ciclo
+                matricula = "";        // Forzamos a repetir el ciclo
             }
         } while (matricula.isEmpty());
 
@@ -105,6 +116,10 @@ public class OperacionesBarcoCarga extends OperacionesComunesBarco {
         System.out.println("Registro exitoso.");
     }
 
+    /**
+     * Sobreescritura del metodo editarDatosBarco() para adaptarlo a un barco de
+     * carga.
+     */
     @Override
     public void editarDatosBarco() {
         System.out.println("\n--- EDICIÓN DE BARCO DE CARGA ---");
@@ -116,7 +131,8 @@ public class OperacionesBarcoCarga extends OperacionesComunesBarco {
         if (barcoEncontrado != null && esTipoValido(barcoEncontrado)) {
 
             BarcoCarga barcoEditar = (BarcoCarga) barcoEncontrado;
-
+            
+            // Opciones disponibles
             System.out.println("Editando barco: " + barcoEditar.getNombre());
             System.out.println("Selecciona el dato a actualizar:");
             System.out.println("1. Nombre");
@@ -197,7 +213,7 @@ public class OperacionesBarcoCarga extends OperacionesComunesBarco {
                 case 6 -> {
                     // VALIDACIÓN COMPLEJA: La nueva cantidad no puede superar el límite actual
                     System.out.println("Cantidad actual: " + barcoEditar.getCantidadContenedores());
-                    System.out.println("Límite del barco: " + barcoEditar.getLimiteContenedores()); // Dato informativo importante
+                    System.out.println("Límite del barco: " + barcoEditar.getLimiteContenedores());        // Dato informativo importante
                     System.out.print("Nueva cantidad: ");
                     try {
                         int nuevaCantidad = Integer.parseInt(leer.nextLine());
@@ -223,7 +239,13 @@ public class OperacionesBarcoCarga extends OperacionesComunesBarco {
             System.out.println("No se encontró un Barco de Carga con la matrícula: " + matricula);
         }
     }
-
+    
+    /**
+     * Retorna un barco si es un tipo de barco de carga.
+     * 
+     * @param b
+     * @return
+     */
     @Override
     protected boolean esTipoValido(Barco b) {
         return b instanceof BarcoCarga;

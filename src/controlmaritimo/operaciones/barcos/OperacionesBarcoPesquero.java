@@ -13,15 +13,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Clase que hereda de la clase OperacionesComunesBarco, se encarga implementar
+ * los metodos de registro y edición de datos de un barco pesquero.
  *
- * @author yazid
+ * @version 1.7 08/12/2025
+ *
+ * @author Nicolás Yazid Cruz Hernández
+ * @author Emilio Álvarez Villalobos
+ * @author Isaac Ádriano Vazquez Torres
+ * @author Luis Darío Padilla Lopez
  */
 public class OperacionesBarcoPesquero extends OperacionesComunesBarco {
-    
+
     public OperacionesBarcoPesquero(List<Barco> barcos) {
         super(barcos);
     }
 
+    /**
+     * Sobreescritura del metodo registrarBarco() para adaptarlo a un barco
+     * pesquero.
+     */
     @Override
     public void registrarBarco() {
         System.out.println("\n--- REGISTRO DE BARCO PESQUERO ---");
@@ -51,7 +62,9 @@ public class OperacionesBarcoPesquero extends OperacionesComunesBarco {
             try {
                 System.out.print("Peso en toneladas: ");
                 peso = Double.parseDouble(leer.nextLine());
-                if (peso <= 0) System.out.println("El peso debe ser mayor a 0.");
+                if (peso <= 0) {
+                    System.out.println("El peso debe ser mayor a 0.");
+                }
             } catch (NumberFormatException e) {
                 System.out.println("Ingresa un número válido.");
             }
@@ -69,7 +82,9 @@ public class OperacionesBarcoPesquero extends OperacionesComunesBarco {
             try {
                 System.out.print("Límite de capacidad (toneladas): ");
                 limiteToneladas = Double.parseDouble(leer.nextLine());
-                if (limiteToneladas <= 0) System.out.println("El límite debe ser mayor a 0.");
+                if (limiteToneladas <= 0) {
+                    System.out.println("El límite debe ser mayor a 0.");
+                }
             } catch (NumberFormatException e) {
                 System.out.println("Ingresa un número válido.");
             }
@@ -115,6 +130,10 @@ public class OperacionesBarcoPesquero extends OperacionesComunesBarco {
         System.out.println("Registro exitoso.");
     }
 
+    /**
+     * Sobreescritura del metodo editarDatosBarco() para adaptarlo a un barco
+     * pesquero.
+     */
     @Override
     public void editarDatosBarco() {
         System.out.println("\n--- EDICIÓN DE BARCO PESQUERO ---");
@@ -262,15 +281,19 @@ public class OperacionesBarcoPesquero extends OperacionesComunesBarco {
                                 barcoEditar.setTiposPescado(pecesActuales);
                                 System.out.println("Lista de peces vaciada.");
                             }
-                            case 4 -> System.out.println("Regresando...");
-                            default -> System.out.println("Opción no válida.");
+                            case 4 ->
+                                System.out.println("Regresando...");
+                            default ->
+                                System.out.println("Opción no válida.");
                         }
                     } catch (NumberFormatException e) {
                         System.out.println("Error: Ingresa un número válido.");
                     }
                 }
-                case 8 -> System.out.println("Operación cancelada.");
-                default -> System.out.println("Opción no válida.");
+                case 8 ->
+                    System.out.println("Operación cancelada.");
+                default ->
+                    System.out.println("Opción no válida.");
             }
 
         } else {
@@ -278,9 +301,15 @@ public class OperacionesBarcoPesquero extends OperacionesComunesBarco {
         }
     }
 
+    /**
+     * Retorna un barco si es un tipo de barco pesquero.
+     * 
+     * @param b
+     * @return
+     */
     @Override
     protected boolean esTipoValido(Barco b) {
         return b instanceof BarcoPesquero;
     }
-    
+
 }

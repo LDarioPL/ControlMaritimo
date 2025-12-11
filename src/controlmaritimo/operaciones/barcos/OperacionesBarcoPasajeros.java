@@ -12,15 +12,26 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
+ * Clase que hereda de la clase OperacionesComunesBarco, se encarga implementar
+ * los metodos de registro y edición de datos de un barco de pasajeros.
  *
- * @author yazid
+ * @version 2.1 08/12/2025
+ *
+ * @author Nicolás Yazid Cruz Hernández
+ * @author Emilio Álvarez Villalobos
+ * @author Isaac Ádriano Vazquez Torres
+ * @author Luis Darío Padilla Lopez
  */
 public class OperacionesBarcoPasajeros extends OperacionesComunesBarco {
     
     public OperacionesBarcoPasajeros(List<Barco> barcos) {
-        super(barcos);
+        super(barcos);       // Pasamos la lista al padre
     }
-
+    
+    /**
+     * Sobreescritura del metodo registrarBarco() para adaptarlo a un barco de
+     * pasajeros.
+     */
     @Override
     public void registrarBarco() {
         System.out.println("\n--- REGISTRO DE BARCO DE PASAJEROS ---");
@@ -112,7 +123,11 @@ public class OperacionesBarcoPasajeros extends OperacionesComunesBarco {
         this.listaBarcos.add(nuevo);
         System.out.println("Registro exitoso.");
     }
-
+    
+    /**
+     * Sobreescritura del metodo editarDatosBarco() para adaptarlo a un barco de
+     * pasajeros.
+     */
     @Override
     public void editarDatosBarco() {
         System.out.println("\n--- EDICIÓN DE BARCO DE PASAJEROS ---");
@@ -248,7 +263,13 @@ public class OperacionesBarcoPasajeros extends OperacionesComunesBarco {
             System.out.println("No se encontró un Barco de Pasajeros con la matrícula: " + matricula);
         }
     }
-
+    
+    /**
+     * Retorna un barco si es un tipo de barco de pasajeros.
+     * 
+     * @param b
+     * @return 
+     */
     @Override
     protected boolean esTipoValido(Barco b) {
         return b instanceof BarcoPasajeros;

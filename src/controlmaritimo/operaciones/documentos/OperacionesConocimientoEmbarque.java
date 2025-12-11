@@ -15,11 +15,19 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
+ * Esta clase implementa la interfaz IOperacionesDocumentos y se en encarga de
+ * sobreescribir los metodos de creación, edición, consulta y eliminación de un
+ * documento de Conocimiento de Embarque.
  *
- * @author yazid
+ * @version 1.8 08/12/2025
+ *
+ * @author Nicolás Yazid Cruz Hernández
+ * @author Emilio Álvarez Villalobos
+ * @author Isaac Ádriano Vazquez Torres
+ * @author Luis Darío Padilla Lopez
  */
 public class OperacionesConocimientoEmbarque implements IOperacionesDocumentos {
-    
+
     private List<ConocimientoEmbarque> listaDocumentos;
     private List<Barco> listaBarcos;     // Necesario para validar que el barco existe
     private List<ZonaPesca> listaZonas;  // Necesario para validar que la zona existe
@@ -37,6 +45,10 @@ public class OperacionesConocimientoEmbarque implements IOperacionesDocumentos {
         this.leer = new Scanner(System.in);
     }
 
+    /**
+     * Sobreescritura del método crearDocumento() para adaptarlo a un
+     * conocimiento de embarque.
+     */
     @Override
     public void crearDocumento() {
         System.out.println("\n--- NUEVO CONOCIMIENTO DE EMBARQUE ---");
@@ -79,6 +91,10 @@ public class OperacionesConocimientoEmbarque implements IOperacionesDocumentos {
         System.out.println("Fecha de entrada registrada: " + ahora.format(formatter));
     }
 
+    /**
+     * Sobreescritura del método editarDocumento() para adaptarlo a un
+     * conocimiento de embarque.
+     */
     @Override
     public void editarDocumento() {
         // En el contexto de un documento legal, "editar" suele ser "Registrar Salida"
@@ -109,15 +125,19 @@ public class OperacionesConocimientoEmbarque implements IOperacionesDocumentos {
         }
     }
 
+    /**
+     * Sobreescritura del método eliminarDocumento() para adaptarlo a un
+     * conocimiento de embarque.
+     */
     @Override
     public void eliminarDocumento() {
         System.out.println("\n--- ELIMINAR DOCUMENTO ---");
         // Para simplificar, eliminamos por matrícula de barco asociada
         System.out.print("Ingrese la Matrícula del Barco del documento a borrar: ");
         String matricula = leer.nextLine();
-        
+
         boolean eliminado = listaDocumentos.removeIf(doc -> doc.getBarco().getMatricula().equalsIgnoreCase(matricula));
-        
+
         if (eliminado) {
             System.out.println("Documento(s) asociado(s) al barco eliminados.");
         } else {
@@ -125,6 +145,10 @@ public class OperacionesConocimientoEmbarque implements IOperacionesDocumentos {
         }
     }
 
+    /**
+     * Sobreescritura del método consultarDocumento() para adaptarlo a un
+     * conocimiento de embarque.
+     */
     @Override
     public void consultarDocumento() {
         System.out.println("\n--- CONSULTA DE CONOCIMIENTOS DE EMBARQUE ---");
@@ -132,7 +156,7 @@ public class OperacionesConocimientoEmbarque implements IOperacionesDocumentos {
             System.out.println("No hay documentos registrados.");
             return;
         }
-        
+
         System.out.println("Listado de documentos:");
         for (int i = 0; i < listaDocumentos.size(); i++) {
             ConocimientoEmbarque doc = listaDocumentos.get(i);
@@ -141,7 +165,14 @@ public class OperacionesConocimientoEmbarque implements IOperacionesDocumentos {
         }
         System.out.println("----------------------------------------");
     }
-    
+
+    /**
+     * Método auxiliar para consultar un documento, busca un barco según una
+     * matricula ingresada.
+     *
+     * @param matricula
+     * @return
+     */
     private Barco buscarBarco(String matricula) {
         for (Barco b : listaBarcos) {
             if (b.getMatricula().equalsIgnoreCase(matricula)) {
@@ -151,6 +182,13 @@ public class OperacionesConocimientoEmbarque implements IOperacionesDocumentos {
         return null;
     }
     
+    /**
+     * Método auxiliar para consultar un documento, busca una zona de pesca
+     * según una clave ingresada.
+     * 
+     * @param clave
+     * @return 
+     */
     private ZonaPesca buscarZona(String clave) {
         for (ZonaPesca z : listaZonas) {
             if (z.getClaveGeolocalizacion().equalsIgnoreCase(clave)) {
@@ -159,5 +197,5 @@ public class OperacionesConocimientoEmbarque implements IOperacionesDocumentos {
         }
         return null;
     }
-    
+
 }
