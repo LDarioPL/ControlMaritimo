@@ -16,7 +16,7 @@ import java.util.List;
  * @author yazid
  */
 public class OperacionesBarcoCarga extends OperacionesComunesBarco {
-    
+
     public OperacionesBarcoCarga(List<Barco> listaBarcos) {
         super(listaBarcos); // Pasamos la lista al padre
     }
@@ -26,16 +26,18 @@ public class OperacionesBarcoCarga extends OperacionesComunesBarco {
 
         System.out.println("\n--- REGISTRO DE BARCOS DE CARGA ---");
 
-        // 1. Pedimos datos COMUNES (Usamos 'leer' que viene del padre)
-        System.out.print("Matrícula: ");
-        String matricula = leer.nextLine().trim();
-        // (Aquí podrías validar si ya existe usando this.buscarBarcoPorMatricula(matricula))
-
-        // Validación básica para no duplicar matrículas
-        if (buscarBarcoPorMatricula(matricula) != null) {
-            System.out.println("Error: Ya existe un barco con esa matrícula.");
-            return;
-        }
+        // 1. Validar Matrícula (Duplicados y vacíos)
+        String matricula;
+        do {
+            System.out.print("Matrícula: ");
+            matricula = leer.nextLine().trim();
+            if (matricula.isEmpty()) {
+                System.out.println("La matrícula no puede estar vacía.");
+            } else if (buscarBarcoPorMatricula(matricula) != null) {
+                System.out.println("Error: Ya existe un barco con esa matrícula. Intenta con otra.");
+                matricula = ""; // Forzamos a repetir el ciclo
+            }
+        } while (matricula.isEmpty());
 
         System.out.print("Nombre: ");
         String nombre = leer.nextLine();
@@ -43,8 +45,19 @@ public class OperacionesBarcoCarga extends OperacionesComunesBarco {
         System.out.print("Bandera: ");
         String bandera = leer.nextLine();
 
-        System.out.print("Peso en toneladas: ");
-        double peso = Double.parseDouble(leer.nextLine());
+        // 2. Validar Peso (Debe ser positivo)
+        double peso = -1;
+        do {
+            try {
+                System.out.print("Peso en toneladas: ");
+                peso = Double.parseDouble(leer.nextLine());
+                if (peso <= 0) {
+                    System.out.println("El peso debe ser mayor a 0.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Ingresa un número válido.");
+            }
+        } while (peso <= 0);
 
         LocalDate fecha = null;
         while (fecha == null) {
@@ -52,13 +65,41 @@ public class OperacionesBarcoCarga extends OperacionesComunesBarco {
             fecha = ValidarFecha.validarFecha(leer.nextLine());
         }
 
-        // Datos especificos del barco de carga
-        System.out.println("Límite de contenedores: ");
-        int limite = Integer.parseInt(leer.nextLine());
+        // 3. Validar Límite de Contenedores (Positivo)
+        int limite = -1;
+        do {
+            try {
+                System.out.print("Límite de contenedores: ");
+                limite = Integer.parseInt(leer.nextLine());
+                if (limite <= 0) {
+                    System.out.println("El límite debe ser mayor a 0.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Ingresa un número entero válido.");
+            }
+        } while (limite <= 0);
 
-        System.out.println("Cantidad actual: ");
-        int cantidad = Integer.parseInt(leer.nextLine());
+        // 4. Validar Cantidad Actual (Positiva y MENOR O IGUAL al límite)
+        int cantidad = -1;
+        boolean cantidadValida = false;
+        do {
+            try {
+                System.out.print("Cantidad actual de contenedores: ");
+                cantidad = Integer.parseInt(leer.nextLine());
 
+                if (cantidad < 0) {
+                    System.out.println("La cantidad no puede ser negativa.");
+                } else if (cantidad > limite) {
+                    System.out.println("La cantidad actual (" + cantidad + ") no puede superar el límite (" + limite + ").");
+                } else {
+                    cantidadValida = true;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Ingresa un número entero válido.");
+            }
+        } while (!cantidadValida);
+
+        // Crear objeto
         Barco nuevoBarco = new BarcoCarga(matricula, bandera, nombre, peso, fecha, limite, cantidad);
         this.listaBarcos.add(nuevoBarco);
         System.out.println("Registro exitoso.");
@@ -70,13 +111,10 @@ public class OperacionesBarcoCarga extends OperacionesComunesBarco {
         System.out.print("Ingresa la matrícula del barco a editar: ");
         String matricula = leer.nextLine();
 
-        // 1. Buscamos el barco
         Barco barcoEncontrado = buscarBarcoPorMatricula(matricula);
 
-        // 2. Verificamos tipo y existencia
         if (barcoEncontrado != null && esTipoValido(barcoEncontrado)) {
 
-            // CASTING: Convertimos a BarcoCarga para acceder a sus métodos
             BarcoCarga barcoEditar = (BarcoCarga) barcoEncontrado;
 
             System.out.println("Editando barco: " + barcoEditar.getNombre());
@@ -115,8 +153,13 @@ public class OperacionesBarcoCarga extends OperacionesComunesBarco {
                     System.out.println("Peso actual: " + barcoEditar.getPesoToneladas());
                     System.out.print("Nuevo peso: ");
                     try {
-                        barcoEditar.setPesoToneladas(Double.parseDouble(leer.nextLine()));
-                        System.out.println("Dato actualizado.");
+                        double nuevoPeso = Double.parseDouble(leer.nextLine());
+                        if (nuevoPeso > 0) {
+                            barcoEditar.setPesoToneladas(nuevoPeso);
+                            System.out.println("Dato actualizado.");
+                        } else {
+                            System.out.println("Error: El peso debe ser positivo. No se realizaron cambios.");
+                        }
                     } catch (NumberFormatException e) {
                         System.out.println("Error: Ingresa un número válido.");
                     }
@@ -131,22 +174,41 @@ public class OperacionesBarcoCarga extends OperacionesComunesBarco {
                     barcoEditar.setFechaBotadura(nuevaFecha);
                     System.out.println("Dato actualizado.");
                 }
-                case 5 -> { // Dato ESPECÍFICO de Carga
+                case 5 -> {
+                    // VALIDACIÓN COMPLEJA: El nuevo límite no puede ser menor a lo que ya carga el barco
                     System.out.println("Límite actual: " + barcoEditar.getLimiteContenedores());
+                    System.out.println("Carga actual: " + barcoEditar.getCantidadContenedores()); // Dato informativo importante
                     System.out.print("Nuevo límite: ");
                     try {
-                        barcoEditar.setLimiteContenedores(Integer.parseInt(leer.nextLine()));
-                        System.out.println("Dato actualizado.");
+                        int nuevoLimite = Integer.parseInt(leer.nextLine());
+                        if (nuevoLimite <= 0) {
+                            System.out.println("Error: El límite debe ser positivo.");
+                        } else if (nuevoLimite < barcoEditar.getCantidadContenedores()) {
+                            System.out.println("Error: No puedes reducir el límite por debajo de la carga actual (" + barcoEditar.getCantidadContenedores() + ").");
+                            System.out.println("Descarga contenedores primero.");
+                        } else {
+                            barcoEditar.setLimiteContenedores(nuevoLimite);
+                            System.out.println("Dato actualizado.");
+                        }
                     } catch (NumberFormatException e) {
                         System.out.println("Error al ingresar número.");
                     }
                 }
-                case 6 -> { // Dato ESPECÍFICO de Carga
+                case 6 -> {
+                    // VALIDACIÓN COMPLEJA: La nueva cantidad no puede superar el límite actual
                     System.out.println("Cantidad actual: " + barcoEditar.getCantidadContenedores());
+                    System.out.println("Límite del barco: " + barcoEditar.getLimiteContenedores()); // Dato informativo importante
                     System.out.print("Nueva cantidad: ");
                     try {
-                        barcoEditar.setCantidadContenedores(Integer.parseInt(leer.nextLine()));
-                        System.out.println("Dato actualizado.");
+                        int nuevaCantidad = Integer.parseInt(leer.nextLine());
+                        if (nuevaCantidad < 0) {
+                            System.out.println("Error: La cantidad no puede ser negativa.");
+                        } else if (nuevaCantidad > barcoEditar.getLimiteContenedores()) {
+                            System.out.println("Error: La cantidad excede el límite del barco (" + barcoEditar.getLimiteContenedores() + ").");
+                        } else {
+                            barcoEditar.setCantidadContenedores(nuevaCantidad);
+                            System.out.println("Dato actualizado.");
+                        }
                     } catch (NumberFormatException e) {
                         System.out.println("Error al ingresar número.");
                     }
@@ -166,5 +228,5 @@ public class OperacionesBarcoCarga extends OperacionesComunesBarco {
     protected boolean esTipoValido(Barco b) {
         return b instanceof BarcoCarga;
     }
-    
+
 }

@@ -24,28 +24,38 @@ public class OperacionesBarcoPesquero extends OperacionesComunesBarco {
 
     @Override
     public void registrarBarco() {
-
         System.out.println("\n--- REGISTRO DE BARCO PESQUERO ---");
 
-        // 1. Pedimos datos COMUNES (Usamos 'leer' que viene del padre)
-        System.out.print("Matrícula: ");
-        String matricula = leer.nextLine();
-        // (Aquí podrías validar si ya existe usando this.buscarBarcoPorMatricula(matricula))
-        
-        // Validación básica para no duplicar matrículas
-        if (buscarBarcoPorMatricula(matricula) != null) {
-            System.out.println("Error: Ya existe un barco con esa matrícula.");
-            return;
-        }
-        
+        // 1. Validar Matrícula (Ciclo para asegurar unicidad y no vacíos)
+        String matricula;
+        do {
+            System.out.print("Matrícula: ");
+            matricula = leer.nextLine().trim();
+            if (matricula.isEmpty()) {
+                System.out.println("La matrícula no puede estar vacía.");
+            } else if (buscarBarcoPorMatricula(matricula) != null) {
+                System.out.println("Error: Ya existe un barco con esa matrícula. Intenta con otra.");
+                matricula = ""; // Forzamos repetir el ciclo
+            }
+        } while (matricula.isEmpty());
+
         System.out.print("Nombre: ");
         String nombre = leer.nextLine();
 
         System.out.print("Bandera: ");
         String bandera = leer.nextLine();
 
-        System.out.print("Peso en toneladas: ");
-        double peso = Double.parseDouble(leer.nextLine());
+        // 2. Validar Peso (> 0)
+        double peso = -1;
+        do {
+            try {
+                System.out.print("Peso en toneladas: ");
+                peso = Double.parseDouble(leer.nextLine());
+                if (peso <= 0) System.out.println("El peso debe ser mayor a 0.");
+            } catch (NumberFormatException e) {
+                System.out.println("Ingresa un número válido.");
+            }
+        } while (peso <= 0);
 
         LocalDate fecha = null;
         while (fecha == null) {
@@ -53,51 +63,60 @@ public class OperacionesBarcoPesquero extends OperacionesComunesBarco {
             fecha = ValidarFecha.validarFecha(leer.nextLine());
         }
 
-        // 2. Datos especificos del barco pesquero
-        System.out.print("Límite de capacidad (toneladas): ");
-        double limiteToneladas = Double.parseDouble(leer.nextLine());
+        // 3. Validar Límite de Capacidad (> 0)
+        double limiteToneladas = -1;
+        do {
+            try {
+                System.out.print("Límite de capacidad (toneladas): ");
+                limiteToneladas = Double.parseDouble(leer.nextLine());
+                if (limiteToneladas <= 0) System.out.println("El límite debe ser mayor a 0.");
+            } catch (NumberFormatException e) {
+                System.out.println("Ingresa un número válido.");
+            }
+        } while (limiteToneladas <= 0);
 
-        System.out.print("Carga actual (toneladas): ");
-        double numToneladas = Double.parseDouble(leer.nextLine());
+        // 4. Validar Carga Actual (>= 0 y <= limite)
+        double numToneladas = -1;
+        boolean cargaValida = false;
+        do {
+            try {
+                System.out.print("Carga actual (toneladas): ");
+                numToneladas = Double.parseDouble(leer.nextLine());
+                if (numToneladas < 0) {
+                    System.out.println("La carga no puede ser negativa.");
+                } else if (numToneladas > limiteToneladas) {
+                    System.out.println("Error: La carga actual (" + numToneladas + ") supera el límite de capacidad (" + limiteToneladas + ").");
+                } else {
+                    cargaValida = true;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Ingresa un número válido.");
+            }
+        } while (!cargaValida);
 
-        // 3. Lógica para pedir la lista de peces
+        // 5. Lista de Peces
         List<String> listaPecesTemporales = new ArrayList<>();
         String respuesta;
-
         System.out.println("--- Registro de Tipos de Pescado ---");
         do {
             System.out.print("Ingrese el tipo de pescado que captura (ej. Atún): ");
             String tipoPez = leer.nextLine();
 
-            // Validamos que no metan vacíos
             if (!tipoPez.trim().isEmpty()) {
                 listaPecesTemporales.add(tipoPez);
             }
-
             System.out.print("¿Desea agregar otro tipo de pescado? (s/n): ");
             respuesta = leer.nextLine();
 
-        } while (respuesta.equalsIgnoreCase("s")); // Repetir mientras diga "s" o "S"
+        } while (respuesta.equalsIgnoreCase("s"));
 
-        // 4. Construimos el objeto pasando la lista llena
-        Barco nuevoBarco = new BarcoPesquero(
-                matricula,
-                bandera,
-                nombre,
-                peso,
-                fecha,
-                limiteToneladas,
-                numToneladas,
-                listaPecesTemporales // Aquí pasamos la lista que acabamos de llenar
-        );
-
+        Barco nuevoBarco = new BarcoPesquero(matricula, bandera, nombre, peso, fecha, limiteToneladas, numToneladas, listaPecesTemporales);
         this.listaBarcos.add(nuevoBarco);
-        System.out.println("Registro exitoso");
+        System.out.println("Registro exitoso.");
     }
 
     @Override
     public void editarDatosBarco() {
-        
         System.out.println("\n--- EDICIÓN DE BARCO PESQUERO ---");
         System.out.print("Ingresa la matrícula del barco a editar: ");
         String matricula = leer.nextLine();
@@ -105,52 +124,58 @@ public class OperacionesBarcoPesquero extends OperacionesComunesBarco {
         Barco barcoEncontrado = buscarBarcoPorMatricula(matricula);
 
         if (barcoEncontrado != null && esTipoValido(barcoEncontrado)) {
-             
-             // CASTING
-             BarcoPesquero barcoEditar = (BarcoPesquero) barcoEncontrado; 
-             
-             System.out.println("Editando barco: " + barcoEditar.getNombre());
-             System.out.println("Selecciona el dato a actualizar:");
-             System.out.println("1. Nombre");
-             System.out.println("2. Bandera");
-             System.out.println("3. Peso");
-             System.out.println("4. Fecha de Botadura");
-             System.out.println("5. Límite de Toneladas");
-             System.out.println("6. Carga Actual");
-             System.out.println("7. GESTIONAR TIPOS DE PESCADO (Lista)");
-             System.out.println("8. Cancelar");
-             System.out.print("Opción: ");
 
-             int opcion = -1;
-             try {
-                 opcion = Integer.parseInt(leer.nextLine());
-             } catch(NumberFormatException e) {
-                 System.out.println("Opción no válida.");
-                 return;
-             }
-             
-             switch(opcion) {
-                 case 1 -> {
-                     System.out.println("Nombre actual: " + barcoEditar.getNombre());
-                     System.out.print("Nuevo nombre: ");
-                     barcoEditar.setNombre(leer.nextLine());
-                     System.out.println("Dato actualizado.");
-                 }
-                 case 2 -> {
-                     System.out.println("Bandera actual: " + barcoEditar.getBandera());
-                     System.out.print("Nueva bandera: ");
-                     barcoEditar.setBandera(leer.nextLine());
-                     System.out.println("Dato actualizado.");
-                 }
-                 case 3 -> {
-                     System.out.println("Peso actual: " + barcoEditar.getPesoToneladas());
-                     System.out.print("Nuevo peso: ");
-                     try {
-                        barcoEditar.setPesoToneladas(Double.parseDouble(leer.nextLine()));
-                        System.out.println("Dato actualizado.");
-                     } catch(NumberFormatException e){ System.out.println("Error: Ingrese un número."); }
-                 }
-                 case 4 -> {
+            BarcoPesquero barcoEditar = (BarcoPesquero) barcoEncontrado;
+
+            System.out.println("Editando barco: " + barcoEditar.getNombre());
+            System.out.println("Selecciona el dato a actualizar:");
+            System.out.println("1. Nombre");
+            System.out.println("2. Bandera");
+            System.out.println("3. Peso");
+            System.out.println("4. Fecha de Botadura");
+            System.out.println("5. Límite de Toneladas");
+            System.out.println("6. Carga Actual");
+            System.out.println("7. GESTIONAR TIPOS DE PESCADO (Lista)");
+            System.out.println("8. Cancelar");
+            System.out.print("Opción: ");
+
+            int opcion = -1;
+            try {
+                opcion = Integer.parseInt(leer.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Opción no válida.");
+                return; // Importante para no entrar al switch con -1
+            }
+
+            switch (opcion) {
+                case 1 -> {
+                    System.out.println("Nombre actual: " + barcoEditar.getNombre());
+                    System.out.print("Nuevo nombre: ");
+                    barcoEditar.setNombre(leer.nextLine());
+                    System.out.println("Dato actualizado.");
+                }
+                case 2 -> {
+                    System.out.println("Bandera actual: " + barcoEditar.getBandera());
+                    System.out.print("Nueva bandera: ");
+                    barcoEditar.setBandera(leer.nextLine());
+                    System.out.println("Dato actualizado.");
+                }
+                case 3 -> {
+                    System.out.println("Peso actual: " + barcoEditar.getPesoToneladas());
+                    System.out.print("Nuevo peso: ");
+                    try {
+                        double nuevoPeso = Double.parseDouble(leer.nextLine());
+                        if (nuevoPeso > 0) {
+                            barcoEditar.setPesoToneladas(nuevoPeso);
+                            System.out.println("Dato actualizado.");
+                        } else {
+                            System.out.println("Error: El peso debe ser positivo.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Error: Ingresa un número válido.");
+                    }
+                }
+                case 4 -> {
                     System.out.println("Fecha actual: " + barcoEditar.getFechaBotadura());
                     LocalDate nuevaFecha = null;
                     while (nuevaFecha == null) {
@@ -159,71 +184,98 @@ public class OperacionesBarcoPesquero extends OperacionesComunesBarco {
                     }
                     barcoEditar.setFechaBotadura(nuevaFecha);
                     System.out.println("Dato actualizado.");
-                 }
-                 case 5 -> {
-                     System.out.println("Límite actual: " + barcoEditar.getLimiteToneladas());
-                     System.out.print("Nuevo límite: ");
-                     try {
-                        barcoEditar.setLimiteToneladas(Double.parseDouble(leer.nextLine()));
-                        System.out.println("Dato actualizado.");
-                     } catch(NumberFormatException e){ System.out.println("Error: Ingrese un número."); }
-                 }
-                 case 6 -> {
-                     System.out.println("Carga actual: " + barcoEditar.getNumToneladas());
-                     System.out.print("Nueva carga actual: ");
-                     try {
-                        barcoEditar.setNumToneladas(Double.parseDouble(leer.nextLine()));
-                        System.out.println("Dato actualizado.");
-                     } catch(NumberFormatException e){ System.out.println("Error: Ingrese un número."); }
-                 }
-                 case 7 -> { // --- SUB-MENÚ PARA LISTA DE PECES ---
-                     // Obtenemos la lista actual (NOTA: getTiposPescado devuelve una COPIA en tu modelo, así que hay que tener cuidado)
-                     List<String> pecesActuales = barcoEditar.getTiposPescado();
-                     
-                     System.out.println("\n--- GESTIÓN DE PECES ---");
-                     System.out.println("Lista actual: " + pecesActuales);
-                     System.out.println("1. Agregar nuevo tipo");
-                     System.out.println("2. Eliminar un tipo existente");
-                     System.out.println("3. Limpiar lista completa");
-                     System.out.println("4. Volver");
-                     System.out.print("Elige una acción: ");
-                     
-                     int subOpcion = Integer.parseInt(leer.nextLine());
-                     
-                     switch(subOpcion) {
-                         case 1 -> {
-                             System.out.print("Ingresa el nuevo tipo de pez: ");
-                             String nuevoPez = leer.nextLine();
-                             pecesActuales.add(nuevoPez);
-                             barcoEditar.setTiposPescado(pecesActuales); // Guardamos la lista modificada
-                             System.out.println("Pez agregado.");
-                         }
-                         case 2 -> {
-                             System.out.print("Ingresa el nombre del pez a eliminar: ");
-                             String pezBorrar = leer.nextLine();
-                             if(pecesActuales.remove(pezBorrar)) { // remove retorna true si lo borró
-                                 barcoEditar.setTiposPescado(pecesActuales);
-                                 System.out.println("Pez eliminado.");
-                             } else {
-                                 System.out.println("No se encontró ese pez en la lista.");
-                             }
-                         }
-                         case 3 -> {
-                             pecesActuales.clear();
-                             barcoEditar.setTiposPescado(pecesActuales);
-                             System.out.println("Lista de peces vaciada.");
-                         }
-                         default -> System.out.println("Regresando...");
-                     }
-                 }
-                 case 8 -> System.out.println("Operación cancelada.");
-                 default -> System.out.println("Opción no válida.");
-             }
-             
+                }
+                case 5 -> { // Validación Límite vs Carga Actual
+                    System.out.println("Límite actual: " + barcoEditar.getLimiteToneladas());
+                    System.out.println("Carga actual a bordo: " + barcoEditar.getNumToneladas());
+                    System.out.print("Nuevo límite: ");
+                    try {
+                        double nuevoLimite = Double.parseDouble(leer.nextLine());
+                        if (nuevoLimite <= 0) {
+                            System.out.println("Error: El límite debe ser positivo.");
+                        } else if (nuevoLimite < barcoEditar.getNumToneladas()) {
+                            System.out.println("Error: No puedes reducir el límite por debajo de la carga actual.");
+                        } else {
+                            barcoEditar.setLimiteToneladas(nuevoLimite);
+                            System.out.println("Dato actualizado.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Error: Ingresa un número válido.");
+                    }
+                }
+                case 6 -> { // Validación Carga vs Límite
+                    System.out.println("Carga actual: " + barcoEditar.getNumToneladas());
+                    System.out.println("Límite permitido: " + barcoEditar.getLimiteToneladas());
+                    System.out.print("Nueva carga actual: ");
+                    try {
+                        double nuevaCarga = Double.parseDouble(leer.nextLine());
+                        if (nuevaCarga < 0) {
+                            System.out.println("Error: La carga no puede ser negativa.");
+                        } else if (nuevaCarga > barcoEditar.getLimiteToneladas()) {
+                            System.out.println("Error: La carga excede el límite de capacidad del barco.");
+                        } else {
+                            barcoEditar.setNumToneladas(nuevaCarga);
+                            System.out.println("Dato actualizado.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Error: Ingresa un número válido.");
+                    }
+                }
+                case 7 -> { // --- SUB-MENÚ PARA LISTA DE PECES ---
+                    List<String> pecesActuales = barcoEditar.getTiposPescado();
+
+                    System.out.println("\n--- GESTIÓN DE PECES ---");
+                    System.out.println("Lista actual: " + pecesActuales);
+                    System.out.println("1. Agregar nuevo tipo");
+                    System.out.println("2. Eliminar un tipo existente");
+                    System.out.println("3. Limpiar lista completa");
+                    System.out.println("4. Volver");
+                    System.out.print("Elige una acción: ");
+
+                    try {
+                        int subOpcion = Integer.parseInt(leer.nextLine());
+
+                        switch (subOpcion) {
+                            case 1 -> {
+                                System.out.print("Ingresa el nuevo tipo de pez: ");
+                                String nuevoPez = leer.nextLine();
+                                if (!nuevoPez.trim().isEmpty()) {
+                                    pecesActuales.add(nuevoPez);
+                                    barcoEditar.setTiposPescado(pecesActuales);
+                                    System.out.println("Pez agregado.");
+                                } else {
+                                    System.out.println("No se puede agregar un nombre vacío.");
+                                }
+                            }
+                            case 2 -> {
+                                System.out.print("Ingresa el nombre del pez a eliminar: ");
+                                String pezBorrar = leer.nextLine();
+                                if (pecesActuales.remove(pezBorrar)) {
+                                    barcoEditar.setTiposPescado(pecesActuales);
+                                    System.out.println("Pez eliminado.");
+                                } else {
+                                    System.out.println("No se encontró ese pez en la lista.");
+                                }
+                            }
+                            case 3 -> {
+                                pecesActuales.clear();
+                                barcoEditar.setTiposPescado(pecesActuales);
+                                System.out.println("Lista de peces vaciada.");
+                            }
+                            case 4 -> System.out.println("Regresando...");
+                            default -> System.out.println("Opción no válida.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Error: Ingresa un número válido.");
+                    }
+                }
+                case 8 -> System.out.println("Operación cancelada.");
+                default -> System.out.println("Opción no válida.");
+            }
+
         } else {
             System.out.println("No se encontró un barco pesquero con esa matrícula.");
         }
-        
     }
 
     @Override

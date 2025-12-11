@@ -24,21 +24,37 @@ public class OperacionesBarcoPasajeros extends OperacionesComunesBarco {
     @Override
     public void registrarBarco() {
         System.out.println("\n--- REGISTRO DE BARCO DE PASAJEROS ---");
-        System.out.print("Matrícula: ");
-        String matricula = leer.nextLine().trim(); //trim() elimina los espacios en blanco de la matricula
-
-        // Validación básica para no duplicar matrículas
-        if (buscarBarcoPorMatricula(matricula) != null) {
-            System.out.println("Error: Ya existe un barco con esa matrícula.");
-            return;
-        }
+        
+        // 1. Validar Matrícula (Ciclo para asegurar unicidad y no vacíos)
+        String matricula;
+        do {
+            System.out.print("Matrícula: ");
+            matricula = leer.nextLine().trim();
+            if (matricula.isEmpty()) {
+                System.out.println("La matrícula no puede estar vacía.");
+            } else if (buscarBarcoPorMatricula(matricula) != null) {
+                System.out.println("Error: Ya existe un barco con esa matrícula. Intenta con otra.");
+                matricula = ""; // Forzamos repetir
+            }
+        } while (matricula.isEmpty());
 
         System.out.print("Nombre: ");
         String nombre = leer.nextLine();
+        
         System.out.print("Bandera: ");
         String bandera = leer.nextLine();
-        System.out.print("Peso en toneladas: ");
-        double peso = Double.parseDouble(leer.nextLine());
+        
+        // 2. Validar Peso (> 0)
+        double peso = -1;
+        do {
+            try {
+                System.out.print("Peso en toneladas: ");
+                peso = Double.parseDouble(leer.nextLine());
+                if (peso <= 0) System.out.println("El peso debe ser mayor a 0.");
+            } catch (NumberFormatException e) {
+                System.out.println("Ingresa un número válido.");
+            }
+        } while (peso <= 0);
 
         LocalDate fecha = null;
         while (fecha == null) {
@@ -46,19 +62,55 @@ public class OperacionesBarcoPasajeros extends OperacionesComunesBarco {
             fecha = ValidarFecha.validarFecha(leer.nextLine());
         }
 
-        System.out.print("Límite Pasajeros: ");
-        int limite = Integer.parseInt(leer.nextLine());
-        System.out.print("Cantidad Actual: ");
-        int cantidad = Integer.parseInt(leer.nextLine());
-        System.out.print("Pisos: ");
-        int pisos = Integer.parseInt(leer.nextLine());
+        // 3. Validar Límite de Pasajeros (> 0)
+        int limite = -1;
+        do {
+            try {
+                System.out.print("Límite Pasajeros: ");
+                limite = Integer.parseInt(leer.nextLine());
+                if (limite <= 0) System.out.println("El límite debe ser mayor a 0.");
+            } catch (NumberFormatException e) {
+                System.out.println("Ingresa un número entero válido.");
+            }
+        } while (limite <= 0);
+        
+        // 4. Validar Cantidad Actual (>= 0 y <= limite)
+        int cantidad = -1;
+        boolean cantidadValida = false;
+        do {
+            try {
+                System.out.print("Cantidad Actual de Pasajeros: ");
+                cantidad = Integer.parseInt(leer.nextLine());
+                if (cantidad < 0) {
+                    System.out.println("La cantidad no puede ser negativa.");
+                } else if (cantidad > limite) {
+                    System.out.println("Error: La cantidad (" + cantidad + ") supera el límite de pasajeros (" + limite + ").");
+                } else {
+                    cantidadValida = true;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Ingresa un número entero válido.");
+            }
+        } while (!cantidadValida);
+        
+        // 5. Validar Pisos (> 0)
+        int pisos = -1;
+        do {
+            try {
+                System.out.print("Pisos: ");
+                pisos = Integer.parseInt(leer.nextLine());
+                if (pisos <= 0) System.out.println("Debe tener al menos 1 piso.");
+            } catch (NumberFormatException e) {
+                System.out.println("Ingresa un número entero válido.");
+            }
+        } while (pisos <= 0);
+
         System.out.print("Tipo Viaje: ");
         String viaje = leer.nextLine();
 
         Barco nuevo = new BarcoPasajeros(matricula, bandera, nombre, peso, fecha, limite, cantidad, pisos, viaje);
         this.listaBarcos.add(nuevo);
         System.out.println("Registro exitoso.");
-
     }
 
     @Override
@@ -67,17 +119,13 @@ public class OperacionesBarcoPasajeros extends OperacionesComunesBarco {
         System.out.print("Ingresa la matrícula del barco a editar: ");
         String matricula = leer.nextLine();
 
-        // 1. Buscamos usando el método del padre
         Barco barcoEncontrado = buscarBarcoPorMatricula(matricula);
 
-        // 2. Verificamos que exista y que sea del tipo correcto
         if (barcoEncontrado != null && esTipoValido(barcoEncontrado)) {
 
-            // HACEMOS CASTING: Convertimos la referencia genérica 'Barco' a 'BarcoPasajeros'
-            // Esto es necesario para acceder a los métodos setNumeroPisos, setTipoViaje, etc.
             BarcoPasajeros barcoEditar = (BarcoPasajeros) barcoEncontrado;
 
-            System.out.println("Barco encontrado: " + barcoEditar.getNombre());
+            System.out.println("Editando barco: " + barcoEditar.getNombre());
             System.out.println("Selecciona el dato que deseas actualizar:");
             System.out.println("1. Nombre");
             System.out.println("2. Bandera");
@@ -115,10 +163,15 @@ public class OperacionesBarcoPasajeros extends OperacionesComunesBarco {
                     System.out.println("Peso actual: " + barcoEditar.getPesoToneladas());
                     System.out.print("Nuevo peso: ");
                     try {
-                        barcoEditar.setPesoToneladas(Double.parseDouble(leer.nextLine()));
-                        System.out.println("Dato actualizado.");
+                        double nuevoPeso = Double.parseDouble(leer.nextLine());
+                        if (nuevoPeso > 0) {
+                            barcoEditar.setPesoToneladas(nuevoPeso);
+                            System.out.println("Dato actualizado.");
+                        } else {
+                            System.out.println("Error: El peso debe ser positivo.");
+                        }
                     } catch (NumberFormatException e) {
-                        System.out.println("Error: Debes ingresar un número válido.");
+                        System.out.println("Error: Ingresa un número válido.");
                     }
                 }
                 case 4 -> {
@@ -131,22 +184,38 @@ public class OperacionesBarcoPasajeros extends OperacionesComunesBarco {
                     barcoEditar.setFechaBotadura(nuevaFecha);
                     System.out.println("Dato actualizado.");
                 }
-                case 5 -> {
+                case 5 -> { // Validación Límite vs Cantidad Actual
                     System.out.println("Límite actual: " + barcoEditar.getLimitePasajeros());
+                    System.out.println("Pasajeros a bordo: " + barcoEditar.getCantidadPasajeros());
                     System.out.print("Nuevo límite: ");
                     try {
-                        barcoEditar.setLimitePasajeros(Integer.parseInt(leer.nextLine()));
-                        System.out.println("Dato actualizado.");
+                        int nuevoLimite = Integer.parseInt(leer.nextLine());
+                        if (nuevoLimite <= 0) {
+                            System.out.println("Error: El límite debe ser positivo.");
+                        } else if (nuevoLimite < barcoEditar.getCantidadPasajeros()) {
+                            System.out.println("Error: No puedes reducir el límite por debajo de la cantidad actual de pasajeros.");
+                        } else {
+                            barcoEditar.setLimitePasajeros(nuevoLimite);
+                            System.out.println("Dato actualizado.");
+                        }
                     } catch (NumberFormatException e) {
                         System.out.println("Error al ingresar número.");
                     }
                 }
-                case 6 -> {
+                case 6 -> { // Validación Cantidad vs Límite
                     System.out.println("Cantidad actual: " + barcoEditar.getCantidadPasajeros());
+                    System.out.println("Límite permitido: " + barcoEditar.getLimitePasajeros());
                     System.out.print("Nueva cantidad: ");
                     try {
-                        barcoEditar.setCantidadPasajeros(Integer.parseInt(leer.nextLine()));
-                        System.out.println("Dato actualizado.");
+                        int nuevaCantidad = Integer.parseInt(leer.nextLine());
+                        if (nuevaCantidad < 0) {
+                            System.out.println("Error: La cantidad no puede ser negativa.");
+                        } else if (nuevaCantidad > barcoEditar.getLimitePasajeros()) {
+                            System.out.println("Error: La cantidad excede el límite de pasajeros del barco.");
+                        } else {
+                            barcoEditar.setCantidadPasajeros(nuevaCantidad);
+                            System.out.println("Dato actualizado.");
+                        }
                     } catch (NumberFormatException e) {
                         System.out.println("Error al ingresar número.");
                     }
@@ -155,8 +224,13 @@ public class OperacionesBarcoPasajeros extends OperacionesComunesBarco {
                     System.out.println("Pisos actuales: " + barcoEditar.getNumeroPisos());
                     System.out.print("Nuevos pisos: ");
                     try {
-                        barcoEditar.setNumeroPisos(Integer.parseInt(leer.nextLine()));
-                        System.out.println("Dato actualizado.");
+                        int nuevosPisos = Integer.parseInt(leer.nextLine());
+                        if (nuevosPisos > 0) {
+                            barcoEditar.setNumeroPisos(nuevosPisos);
+                            System.out.println("Dato actualizado.");
+                        } else {
+                            System.out.println("Error: Debe tener al menos 1 piso.");
+                        }
                     } catch (NumberFormatException e) {
                         System.out.println("Error al ingresar número.");
                     }
@@ -167,10 +241,8 @@ public class OperacionesBarcoPasajeros extends OperacionesComunesBarco {
                     barcoEditar.setTipoViaje(leer.nextLine());
                     System.out.println("Dato actualizado.");
                 }
-                case 9 ->
-                    System.out.println("Operación cancelada.");
-                default ->
-                    System.out.println("Opción no válida.");
+                case 9 -> System.out.println("Operación cancelada.");
+                default -> System.out.println("Opción no válida.");
             }
         } else {
             System.out.println("No se encontró un Barco de Pasajeros con la matrícula: " + matricula);
