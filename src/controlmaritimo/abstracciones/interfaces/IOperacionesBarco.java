@@ -5,14 +5,24 @@
 package controlmaritimo.abstracciones.interfaces;
 
 /**
- *
- * @author yazid
+ * Esta interfaz contiene todas las operaciones basicas para cualquier tipo de
+ * barco: registro, eliminación, edición y consulta de datos.
+ * 
+ * @version 1.2 06/12/2025
+ * 
+ * @author Nicolás Yazid Cruz Hernández
+ * @author Emilio Álvarez Villalobos
+ * @author Luis Darío Padilla López
+ * @author Isaac Adriano Vázquez Torres
  */
 public interface IOperacionesBarco {
     
     public void registrarBarco();
-    public void eliminarBarco();
-    public void editarDatosBarco();
-    public void consultarDatosBarco();
     
+    public void eliminarBarco();
+
+    public void editarDatosBarco();
+
+    public void consultarDatosBarco();
+
 }

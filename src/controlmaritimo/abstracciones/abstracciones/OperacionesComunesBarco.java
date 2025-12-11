@@ -13,6 +13,9 @@ import java.util.Scanner;
  * barcos existentes, incluye operaciones de registro, actualización,
  * eliminación y consulta de datos, esta clase abstracta sirve como base para
  * las operaciones que debe realizar de cada tipo de barco.
+ * 
+ * Esta clase implementa la interfaz IOperacionesBarco que contiene los metodos
+ * de registro, actualización, eliminación y consulta de datos.
  *
  * @version 1.1 06/12/2025
  *

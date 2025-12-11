@@ -14,7 +14,7 @@ import java.util.List;
  * Clase abstracta que contiene todos los atributos comunes de un barco,
  * contiene un constructor sobrecargado y todos los metodos getters y setters.
  *
- * @version 4.0 08/02/2025
+ * @version 4.0 08/12/2025
  *
  * @author Nicolás Yazid Cruz Hernández
  * @author Emilio Álvarez Villalobos
